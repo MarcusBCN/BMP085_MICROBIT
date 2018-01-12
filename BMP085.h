@@ -11,7 +11,6 @@
   BSD license, all text above must be included in any redistribution
  ***************************************************************************/
 
-//#include "MicroBitTouchDevelop.h"
 #include "MicroBit.h"
 
 #ifndef __MICROBIT_BMP085_H

@@ -7,7 +7,6 @@
 #ifndef __MICROBIT_I2CCOMMON_H
 #define __MICROBIT_I2CCOMMON_H
 
-namespace touch_develop {
 namespace i2c {
   class I2CSimple {
     public:
@@ -20,7 +19,6 @@ namespace i2c {
       char addr;
       char mask;
   };
-}
 }
 
 #endif

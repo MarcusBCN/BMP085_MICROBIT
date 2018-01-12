@@ -2,7 +2,7 @@
 
 namespace bmp085 {
 
-  using namespace ::touch_develop::i2c;
+  using namespace i2c;
 
   I2CSimple i2c(0x77);
 

@@ -1,6 +1,5 @@
 #include "I2CCommon.h"
 
-namespace touch_develop {
 namespace i2c {
   I2CSimple::I2CSimple(char addr, char mask): addr(addr), mask(mask) {}
 
@@ -33,5 +32,4 @@ namespace i2c {
     char c[] = { reg, value };
     uBit.i2c.write(addr << 1, c, 2);
   }
-}
 }
