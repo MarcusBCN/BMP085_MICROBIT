@@ -1,0 +1,20 @@
+{
+    "name": "uBit_BMP085",
+    "version": "0.1.0",
+    "description": "Library for BMP085",
+    "license": "MIT",
+    "dependencies": {
+        "core": "*",
+        "radio": "*"
+    },
+    "files": [
+      "README.md",
+      "main.ts",
+      "shims.d.ts",
+      "enums0.d.ts"
+    ],
+    "testFiles": [
+        "test.ts"
+    ],
+    "public": false
+}
