@@ -10,10 +10,9 @@
     "files": [
       "README.md",
       "bmp085.ts",
-      "I2CCommon.h",
-      "I2CCommon.cpp",
       "BMP085.cpp",
-      "BMP085.h"
+      "shims.d.ts",
+      "enums.d.ts"
     ],
     "testFiles": [
         "test.ts"
