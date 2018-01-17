@@ -92,8 +92,14 @@ namespace bmp085{
     let p16 = 0
     let up = 0
     let ut = 0
-    let b3, b4, b5, b6, b7 = 0
-    let x1, x2, x3 = 0
+    let b3 =0 
+    let b4 = 0 
+    let b5 = 0
+    let b6 = 0
+    let b7 = 0
+    let x1 = 0
+    let x2 = 0 
+    let x3 = 0
     let p = 0
     let compp = 0
 
