@@ -87,16 +87,60 @@ namespace bmp085{
    * Returns an 8 digit number. Value should be divided by 25600 to get hPa.
    */
   //% weight=42 blockGap=8 blockId="pressure" block="pressure"
-/*
   export function pressure(): number {
-      // Read the temperature registers
-      let pressRegM = readBMEReg(pressMSB, NumberFormat.UInt16BE)
-      let pressRegL = readBMEReg(pressXlsb, NumberFormat.UInt8LE)
+    let p8 = 0
+    let p16 = 0
+    let up = 0
+    let ut = 0
+    let b3, b4, b5, b6, b7 = 0
+    let x1, x2, x3 = 0
+    let p = 0
+    let compp = 0
 
-      // Compensate and return pressure
-      return compensatePressure((pressRegM << 4) | (pressRegL >> 4), tFine, digPBuf)
+     /* Get the raw pressure and temperature values */
+     ut = readBMEReg(tempData, NumberFormat.UInt16BE)
+
+      WriteBMEReg(ctrl, readPressCMD + (bmpMode << 6))
+      basic.pause(5)
+      p16 = readBMEReg(pressData, NumberFormat.UInt16BE)
+      up = p16 << 8
+      p8 = readBMEReg(pressData+2, NumberFormat.UInt8LE)
+      up += p8
+      up >>= (8 - bmpMode)
+
+      /* Temperature compensation */
+    b5 = computeB5(ut)
+
+    /* Pressure compensation */
+    b6 = b5 - 4000
+    x1 = (b2Val * ((b6 * b6) >> 12)) >> 11
+    x2 = (ac2Val * b6) >> 11
+    x3 = x1 + x2
+    b3 = (((( ac1Val) * 4 + x3) << bmpMode) + 2) >> 2
+    x1 = (ac3Val * b6) >> 13
+    x2 = (b1Val * ((b6 * b6) >> 12)) >> 16
+    x3 = ((x1 + x2) + 2) >> 2
+    b4 = (ac4Val * (x3 + 32768)) >> 15
+    b7 = ((up - b3) * (50000 >> bmpMode))
+
+    if (b7 < 0x80000000)
+    {
+      p = (b7 << 1) / b4;
+    }
+    else
+    {
+      p = (b7 / b4) << 1;
+    }
+
+    x1 = (p >> 8) * (p >> 8);
+    x1 = (x1 * 3038) >> 16;
+    x2 = (-7357 * p) >> 16;
+    compp = p + ((x1 + x2 + 3791) >> 4);
+
+    /* Assign compensated pressure value */
+    return compp;
   }
-*/
+
   /**
    * Returns temperature in DegC, resolution is 0.01 DegC. Output value of “5123” equals 51.23 DegC.
    * tFine carries fine temperature as global value
