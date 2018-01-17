@@ -117,26 +117,7 @@ namespace bmp085{
       /* Temperature compensation */
     b5 = computeB5(ut)
 
-    /* Pressure compensation */
-    b6 = b5 - 4000
-    x1 = (b2Val * ((b6 * b6) >> 12)) >> 11
-    x2 = (ac2Val * b6) >> 11
-    x3 = x1 + x2
-    b3 = (((( ac1Val) * 4 + x3) << bmpMode) + 2) >> 2
-    x1 = (ac3Val * b6) >> 13
-    x2 = (b1Val * ((b6 * b6) >> 12)) >> 16
-    x3 = ((x1 + x2) + 2) >> 2
-    b4 = (ac4Val * (x3 + 32768)) >> 15
-    b7 = ((up - b3) * (50000 >> bmpMode))
-
-    if (b7 < 0x80000000)
-    {
-      p = (b7 << 1) / b4;
-    }
-    else
-    {
-      p = (b7 / b4) << 1;
-    }
+    p = compensatePressure(b5, up, b2Val, ac2Val, ac1Val, ac3Val, b1Val, ac4Val, bmpMode)
 
     x1 = (p >> 8) * (p >> 8);
     x1 = (x1 * 3038) >> 16;
@@ -178,6 +159,15 @@ function computeB5(UT: number) {
   let X1 = (UT - ac6Val) * (ac5Val) >> 15;
   let X2 = (mcVal << 11) / (X1 + mdVal);
   return X1 + X2;
+}
+
+/**
+ * Function used for simulator, actual implementation is in bmp085.cpp
+*/
+//% shim=bmp085::compensatePressure
+function compensatePressure(pressRegVal: number, up: number, b2Val: number, ac2Val: number, ac1Val: number, ac3Val: number, b1Val: number, ac4Val: number, bmpMode: number ) {
+    // Fake function for simulator
+    return 0
 }
 
 }
