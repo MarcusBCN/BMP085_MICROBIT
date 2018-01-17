@@ -47,6 +47,8 @@ namespace bmp085{
    let mcVal = 0
    let mdVal = 0
 
+   let bmpMode        = 0
+
  /***************************************************************************************
  * Functions for interfacing with the BME085
  ***************************************************************************************/
@@ -105,15 +107,16 @@ namespace bmp085{
       // Get the NVM digital compensation number from the device
       ac1Val = readBMEReg(ac1, NumberFormat.UInt16BE);
       ac2Val = readBMEReg(ac2, NumberFormat.UInt16BE);
-      ac3Val = readBMEReg(ac2, NumberFormat.UInt16BE);
-      ac4Val = readBMEReg(ac2, NumberFormat.UInt16BE);
-      ac5Val = readBMEReg(ac2, NumberFormat.UInt16BE);
-      ac6Val = readBMEReg(ac2, NumberFormat.UInt16BE);
-      b1Val = readBMEReg(ac2, NumberFormat.UInt16BE);
-      b2Val = readBMEReg(ac2, NumberFormat.UInt16BE);
-      mbVal = readBMEReg(ac2, NumberFormat.UInt16BE);
-      mcVal = readBMEReg(ac2, NumberFormat.UInt16BE);
-      mdVal = readBMEReg(ac2, NumberFormat.UInt16BE);
+      ac3Val = readBMEReg(ac3, NumberFormat.UInt16BE);
+      ac4Val = readBMEReg(ac4, NumberFormat.UInt16BE);
+      ac5Val = readBMEReg(ac5, NumberFormat.UInt16BE);
+      ac6Val = readBMEReg(ac6, NumberFormat.UInt16BE);
+      b1Val = readBMEReg(b1, NumberFormat.UInt16BE);
+      b2Val = readBMEReg(b2, NumberFormat.UInt16BE);
+      mbVal = readBMEReg(mb, NumberFormat.UInt16BE);
+      mcVal = readBMEReg(mc, NumberFormat.UInt16BE);
+      mdVal = readBMEReg(md, NumberFormat.UInt16BE);
+
 
       let B5 = computeB5(UT);
       t = (B5+8) >> 4;
@@ -123,7 +126,7 @@ namespace bmp085{
 
 function computeB5(UT: number) {
   let X1 = (UT - ac6Val) * (ac5Val) >> 15;
-  let X2 = (mcVal << 11) / (X1+mdVal);
+  let X2 = (mcVal << 11) / (X1 + mdVal);
   return X1 + X2;
 }
 
