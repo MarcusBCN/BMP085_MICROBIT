@@ -73,7 +73,7 @@ namespace bmp085{
    * Reads the temp from the BMP sensor and uses compensation for calculator temperature.
    * Returns 4 digit number. Value should be devided by 100 to get DegC
    */
-  //% weight=43 blockGap=8 blockId="weatherbit_temperature" block="temperature(C)"
+  //% weight=45 blockGap=8 blockId="temperature" block="temperature(C)"
   export function temperature(): number {
       // Read the temperature registers
       let tempRegM = readBMEReg(tempData, NumberFormat.UInt16BE)
@@ -91,7 +91,7 @@ namespace bmp085{
     let p8 = 0
     let p16 = 0
     let up = 0
-    let ut = 0
+    let UT = 0
     let b3 =0 
     let b4 = 0 
     let b5 = 0
@@ -104,7 +104,21 @@ namespace bmp085{
     let compp = 0
 
      /* Get the raw pressure and temperature values */
-     ut = readBMEReg(tempData, NumberFormat.UInt16BE)
+     UT = readBMEReg(tempData, NumberFormat.UInt16BE)
+/*
+     UT = 27898;
+
+     ac6Val = 23153;
+     ac5Val = 32757;
+     mcVal = -8711;
+     mdVal = 2868;
+     b1Val = 6190;
+     b2Val = 4;
+     ac3Val = -14383;
+     ac2Val = -72;
+     ac1Val = 408;
+     ac4Val = 32741;
+     */
 
       WriteBMEReg(ctrl, readPressCMD + (bmpMode << 6))
       basic.pause(5)
@@ -115,7 +129,7 @@ namespace bmp085{
       up >>= (8 - bmpMode)
 
       /* Temperature compensation */
-    b5 = computeB5(ut)
+    b5 = computeB5(UT)
 
     p = compensatePressure(b5, up, b2Val, ac2Val, ac1Val, ac3Val, b1Val, ac4Val, bmpMode)
 
