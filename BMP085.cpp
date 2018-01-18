@@ -24,9 +24,40 @@ namespace bmp085 {
 * it requires the use of 64-bit signed integers which isn't provided in TypeScript
 */
 //%
-uint32_t compensatePressure(int32_t b5, int32_t up, int32_t b2Val, int32_t ac2Val, int32_t ac1Val, int32_t ac3Val, int32_t b1Val, int32_t ac4Val, int8_t bmpMode) {
+uint32_t compensatePressure(int16_t b5, int16_t up, Buffer compensation) {
     int32_t  x1, x2, b6, x3, b3, p;
     uint32_t b4, b7;
+
+     // Create a managed buffer out of the packet compensation data
+     ManagedBuffer comp(compensation);
+
+     // Compensation Values
+        uint16_t ac1Val;
+        int16_t ac2Val;
+        int16_t ac3Val;
+        int16_t ac4Val;
+        int16_t ac5Val;
+        int16_t ac6Val;
+        int16_t b1Val;
+        int16_t b2Val;
+        int16_t mbVal;
+        int16_t mcVal;
+        int16_t mdVal;
+        int8_t bmpMode;
+
+        // Unpack the compensation data
+        comp.readBytes((uint8_t *) &ac1Val, 0, 2);
+        comp.readBytes((uint8_t *) &ac2Val, 2, 2);
+        comp.readBytes((uint8_t *) &ac3Val, 4, 2);
+        comp.readBytes((uint8_t *) &ac4Val, 6, 2);
+        comp.readBytes((uint8_t *) &ac5Val, 8, 2);
+        comp.readBytes((uint8_t *) &ac6Val, 10, 2);
+        comp.readBytes((uint8_t *) &b1Val, 12, 2);
+        comp.readBytes((uint8_t *) &b2Val, 14, 2);
+        comp.readBytes((uint8_t *) &mbVal, 16, 2);
+        comp.readBytes((uint8_t *) &mcVal, 18, 2);
+        comp.readBytes((uint8_t *) &mdVal, 20, 2);
+        comp.readBytes((uint8_t *) &bmpMode, 22, 2);
 
     /* Pressure compensation */
     b6 = b5 - 4000;
