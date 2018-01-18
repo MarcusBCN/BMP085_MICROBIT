@@ -52,4 +52,12 @@ uint32_t compensatePressure(int32_t b5, int32_t up, int32_t b2Val, int32_t ac2Va
     return p;
 }
 
+  /*
+  * calculates the Altitude based on pressure. 
+  */
+  //%    
+  uint32_t calcAltitude(int32_t p) {     
+    return 44330*(1-pow(((p/25600)/1013.25), 0.1903));
+  }
+
 }

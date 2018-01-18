@@ -193,4 +193,43 @@ function compensatePressure(pressRegVal: number, up: number, b2Val: number, ac2V
     return 0
 }
 
+/**
+ * Function used for simulator, actual implementation is in bmp085.cpp
+*/
+//% shim=bmp085::calcAltitude
+function calcAltitude(p: number ) {
+    // Fake function for simulator
+    return 0
+}
+
+/**
+* 
+* Calculates the Altitude based on pressure. 
+*/
+//% weight=32 blockGap=8 blockId="altitude" block="altitude"
+export function Altitude(): number {
+    let up = 0
+    let UT = 0
+    let p16 = 0
+    let p8 = 0 
+    let b5 = 0
+    let p = 0
+
+    /* Get the raw pressure and temperature values */
+    UT = readBMEReg(tempData, NumberFormat.UInt16BE)
+
+    /* Temperature compensation */
+    b5 = computeB5(UT)
+
+    WriteBMEReg(ctrl, readPressCMD + (bmpMode << 6))
+    basic.pause(5)
+    p16 = readBMEReg(pressData, NumberFormat.UInt16BE)
+    up = p16 << 8
+    p8 = readBMEReg(pressData+2, NumberFormat.UInt8LE)
+    up += p8
+    up >>= (8 - bmpMode)
+    p = compensatePressure(b5, up, b2Val, ac2Val, ac1Val, ac3Val, b1Val, ac4Val, bmpMode)
+    return calcAltitude(p)
+}
+
 }
