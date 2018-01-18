@@ -47,7 +47,7 @@ namespace bmp085{
    let mcVal = 0
    let mdVal = 0
 
-   let bmpMode        = 0
+   let bmpMode = 0
 
  /***************************************************************************************
  * Functions for interfacing with the BME085
@@ -81,6 +81,15 @@ namespace bmp085{
       // Use compensation formula and return result
       return compensateTemp(tempRegM)
   }
+
+   /**
+   * The sampling rate mode (ultra low power, standard, high, ultra high resolution) can be seleted by the variable
+   * SelectModeBmp (0,1,2,3), default: 0
+   */
+  //% weight=45 blockGap=8 blockId="SelecBMPMode" block="SelectBMPMode %value"
+export function selectBmpMode(value: number): void {
+    bmpMode = value
+}
 
   /**
    * Reads the pressure from the BMP sensor and uses compensation for calculating pressure.
