@@ -78,11 +78,12 @@ namespace bmp085{
    */
   //% weight=45 blockGap=8 blockId="temperature" block="temperature(C)"
   export function temperature(): number {
-      // Read the temperature registers
-      let tempRegM = readBMEReg(tempData, NumberFormat.UInt16BE)
 
-      // Use compensation formula and return result
-      return compensateTemp(tempRegM)
+    WriteBMEReg(ctrl, readTempCMD)
+    basic.pause(5)
+    // Read the temperature registers
+    let tempRegM = readBMEReg(tempData, NumberFormat.Int16BE)
+    return compensateTemp(tempRegM)
   }
 
    /**
@@ -148,7 +149,7 @@ export function selectBmpMode(value: number): void {
    */
   function compensateTemp(UT: number): number {
       let t = 0
-
+      //UT = 27898
       let B5 = computeB5(UT);
       t = (B5+8) >> 4;
       t /= 10;
