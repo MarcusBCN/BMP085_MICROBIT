@@ -157,37 +157,50 @@ export function selectBmpMode(value: number): void {
 
 function computeB5(UT: number) {
   // Get the NVM digital compensation number from the device
-  ac1Val = readBMEReg(ac1, NumberFormat.UInt16BE);
-  ac2Val = readBMEReg(ac2, NumberFormat.UInt16BE);
-  ac3Val = readBMEReg(ac3, NumberFormat.UInt16BE);
+  ac1Val = readBMEReg(ac1, NumberFormat.Int16BE);
+  ac2Val = readBMEReg(ac2, NumberFormat.Int16BE);
+  ac3Val = readBMEReg(ac3, NumberFormat.Int16BE);
   ac4Val = readBMEReg(ac4, NumberFormat.UInt16BE);
   ac5Val = readBMEReg(ac5, NumberFormat.UInt16BE);
   ac6Val = readBMEReg(ac6, NumberFormat.UInt16BE);
-  b1Val = readBMEReg(b1, NumberFormat.UInt16BE);
-  b2Val = readBMEReg(b2, NumberFormat.UInt16BE);
-  mbVal = readBMEReg(mb, NumberFormat.UInt16BE);
-  mcVal = readBMEReg(mc, NumberFormat.UInt16BE);
-  mdVal = readBMEReg(md, NumberFormat.UInt16BE);
+  b1Val = readBMEReg(b1, NumberFormat.Int16BE);
+  b2Val = readBMEReg(b2, NumberFormat.Int16BE);
+  mbVal = readBMEReg(mb, NumberFormat.Int16BE);
+  mcVal = readBMEReg(mc, NumberFormat.Int16BE);
+  mdVal = readBMEReg(md, NumberFormat.Int16BE);
 
   // Instantiate buffer that holds the pressure compensation values
   regPBuf = pins.createBuffer(24)
 
   // Get the NVM digital compensation number from the device for pressure and pack into
   // a buffer to pass to the C++ implementation of the compensation formula
-  regPBuf.setNumber(NumberFormat.UInt16LE, 0, readBMEReg(ac1, NumberFormat.UInt16LE))
-  regPBuf.setNumber(NumberFormat.Int16LE, 2, readBMEReg(ac2, NumberFormat.Int16LE))
-  regPBuf.setNumber(NumberFormat.Int16LE, 4, readBMEReg(ac3, NumberFormat.Int16LE))
-  regPBuf.setNumber(NumberFormat.Int16LE, 6, readBMEReg(ac4, NumberFormat.Int16LE))
-  regPBuf.setNumber(NumberFormat.Int16LE, 8, readBMEReg(ac5, NumberFormat.Int16LE))
-  regPBuf.setNumber(NumberFormat.Int16LE, 10, readBMEReg(ac6, NumberFormat.Int16LE))
-  regPBuf.setNumber(NumberFormat.Int16LE, 12, readBMEReg(b1, NumberFormat.Int16LE))
-  regPBuf.setNumber(NumberFormat.Int16LE, 14, readBMEReg(b2, NumberFormat.Int16LE))
-  regPBuf.setNumber(NumberFormat.Int16LE, 16, readBMEReg(mb, NumberFormat.Int16LE))
-  regPBuf.setNumber(NumberFormat.Int16LE, 18, readBMEReg(mc, NumberFormat.Int16LE))
-  regPBuf.setNumber(NumberFormat.Int16LE, 20, readBMEReg(md, NumberFormat.Int16LE))
-  regPBuf.setNumber(NumberFormat.Int16LE, 22, bmpMode)  
-
-
+  regPBuf.setNumber(NumberFormat.Int16BE, 0, readBMEReg(ac1, NumberFormat.Int16BE))
+  regPBuf.setNumber(NumberFormat.Int16BE, 2, readBMEReg(ac2, NumberFormat.Int16BE))
+  regPBuf.setNumber(NumberFormat.Int16BE, 4, readBMEReg(ac3, NumberFormat.Int16BE))
+  regPBuf.setNumber(NumberFormat.UInt16BE, 6, readBMEReg(ac4, NumberFormat.UInt16BE))
+  regPBuf.setNumber(NumberFormat.UInt16BE, 8, readBMEReg(ac5, NumberFormat.UInt16BE))
+  regPBuf.setNumber(NumberFormat.UInt16BE, 10, readBMEReg(ac6, NumberFormat.UInt16BE))
+  regPBuf.setNumber(NumberFormat.Int16BE, 12, readBMEReg(b1, NumberFormat.Int16BE))
+  regPBuf.setNumber(NumberFormat.Int16BE, 14, readBMEReg(b2, NumberFormat.Int16BE))
+  regPBuf.setNumber(NumberFormat.Int16BE, 16, readBMEReg(mb, NumberFormat.Int16BE))
+  regPBuf.setNumber(NumberFormat.Int16BE, 18, readBMEReg(mc, NumberFormat.Int16BE))
+  regPBuf.setNumber(NumberFormat.Int16BE, 20, readBMEReg(md, NumberFormat.Int16BE))
+  regPBuf.setNumber(NumberFormat.Int16BE, 22, bmpMode)  
+ 
+  //Datasheet Value
+  /*
+  ac1Val = 408
+  ac2Val = -72
+  ac3Val = -14383
+  ac4Val = 32741
+  ac5Val = 32757
+  ac6Val = 23153
+  b1Val = 6190
+  b2Val = 4
+  mbVal = -32768
+  mcVal = -8711
+  mdVal = 2868
+*/
   let X1 = (UT - ac6Val) * (ac5Val) >> 15;
   let X2 = (mcVal << 11) / (X1 + mdVal);
   return X1 + X2;
