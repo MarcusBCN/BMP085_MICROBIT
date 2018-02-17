@@ -24,7 +24,7 @@ namespace bmp085 {
 * it requires the use of 64-bit signed integers which isn't provided in TypeScript
 */
 //%
-uint32_t compensatePressure(int16_t b5, int16_t up, Buffer compensation) {
+int32_t compensatePressure(int16_t b5, int16_t up, Buffer compensation) {
     int32_t  x1, x2, b6, x3, b3, p;
     uint32_t b4, b7;
 
@@ -32,12 +32,12 @@ uint32_t compensatePressure(int16_t b5, int16_t up, Buffer compensation) {
      ManagedBuffer comp(compensation);
 
      // Compensation Values
-        uint16_t ac1Val;
+        int16_t ac1Val; //ER
         int16_t ac2Val;
         int16_t ac3Val;
-        int16_t ac4Val;
-        int16_t ac5Val;
-        int16_t ac6Val;
+        uint16_t ac4Val;
+        uint16_t ac5Val;
+        uint16_t ac6Val;
         int16_t b1Val;
         int16_t b2Val;
         int16_t mbVal;
@@ -61,15 +61,15 @@ uint32_t compensatePressure(int16_t b5, int16_t up, Buffer compensation) {
 
     /* Pressure compensation */
     b6 = b5 - 4000;
-    x1 = (b2Val * ((b6 * b6) >> 12)) >> 11;
-    x2 = (ac2Val * b6) >> 11;
+    x1 = ((int32_t)b2Val * ((b6 * b6) >> 12)) >> 11;
+    x2 = ((int32_t)ac2Val * b6) >> 11;
     x3 = x1 + x2;
-    b3 = (((((int32_t) ac1Val) * 4 + x3) << bmpMode) + 2) >> 2;
-    x1 = (ac3Val * b6) >> 13;
-    x2 = (b1Val * ((b6 * b6) >> 12)) >> 16;
+    b3 = (((((int32_t)ac1Val) * 4 + x3) << bmpMode) + 2) >> 2;
+    x1 = ((int32_t)ac3Val * b6) >> 13;
+    x2 = ((int32_t)b1Val * ((b6 * b6) >> 12)) >> 16;
     x3 = ((x1 + x2) + 2) >> 2;
-    b4 = (ac4Val * (uint32_t) (x3 + 32768)) >> 15;
-    b7 = ((uint32_t) (up - b3) * (50000 >> bmpMode));
+    b4 = ((uint32_t)ac4Val * (uint32_t) (x3 + 32768)) >> 15;
+    b7 = (((uint32_t)up - b3) * (uint32_t)(50000UL >> bmpMode));
 
     if (b7 < 0x80000000)
     {
@@ -79,7 +79,7 @@ uint32_t compensatePressure(int16_t b5, int16_t up, Buffer compensation) {
     {
       p = (b7 / b4) << 1;
     }
-
+    
     return p;
 }
 

@@ -116,31 +116,39 @@ export function selectBmpMode(value: number): void {
     let p = 0
     let compp = 0
 
-     /* Get the raw pressure and temperature values */
-     UT = readBMEReg(tempData, NumberFormat.UInt16BE)
+    
+    WriteBMEReg(ctrl, readTempCMD)
+    basic.pause(5)
+    
+    // Read the temperature registers
+    UT = readBMEReg(tempData, NumberFormat.Int16BE)
+    
+    //Variable Debug datasheet value
+    //UT = 27898
 
-     //UT = 27898;
-
-      WriteBMEReg(ctrl, readPressCMD + (bmpMode << 6))
-      basic.pause(5)
-      p16 = readBMEReg(pressData, NumberFormat.UInt16BE)
-      up = p16 << 8
-      p8 = readBMEReg(pressData+2, NumberFormat.UInt8LE)
-      up += p8
-      up >>= (8 - bmpMode)
+    WriteBMEReg(ctrl, readPressCMD + (bmpMode << 6))
+    basic.pause(5)
+    p16 = readBMEReg(pressData, NumberFormat.UInt16BE)
+    up = p16 << 8
+    p8 = readBMEReg(pressData, NumberFormat.UInt8LE)
+    up += p8
+    up >>= (8 - bmpMode)
+    
+    //Variable Debug datasheet value
+    //up = 23843
 
       /* Temperature compensation */
     b5 = computeB5(UT)
 
     p = compensatePressure(b5, up, regPBuf)
 
-    x1 = (p >> 8) * (p >> 8);
-    x1 = (x1 * 3038) >> 16;
-    x2 = (-7357 * p) >> 16;
-    compp = p + ((x1 + x2 + 3791) >> 4);
+    x1 = (p >> 8) * (p >> 8)
+    x1 = (x1 * 3038) >> 16
+    x2 = (-7357 * p) >> 16
+    compp = p + ((x1 + x2 + 3791) >> 4)
 
     /* Assign compensated pressure value */
-    return compp;
+    return compp
   }
 
   /**
@@ -149,7 +157,10 @@ export function selectBmpMode(value: number): void {
    */
   function compensateTemp(UT: number): number {
       let t = 0
+      
+      //Variable Debug datasheet value
       //UT = 27898
+      
       let B5 = computeB5(UT);
       t = (B5+8) >> 4;
       t /= 10;
@@ -157,6 +168,7 @@ export function selectBmpMode(value: number): void {
   }
 
 function computeB5(UT: number) {
+ 
   // Get the NVM digital compensation number from the device
   ac1Val = readBMEReg(ac1, NumberFormat.Int16BE);
   ac2Val = readBMEReg(ac2, NumberFormat.Int16BE);
@@ -175,32 +187,45 @@ function computeB5(UT: number) {
 
   // Get the NVM digital compensation number from the device for pressure and pack into
   // a buffer to pass to the C++ implementation of the compensation formula
-  regPBuf.setNumber(NumberFormat.Int16BE, 0, readBMEReg(ac1, NumberFormat.Int16BE))
-  regPBuf.setNumber(NumberFormat.Int16BE, 2, readBMEReg(ac2, NumberFormat.Int16BE))
-  regPBuf.setNumber(NumberFormat.Int16BE, 4, readBMEReg(ac3, NumberFormat.Int16BE))
-  regPBuf.setNumber(NumberFormat.UInt16BE, 6, readBMEReg(ac4, NumberFormat.UInt16BE))
-  regPBuf.setNumber(NumberFormat.UInt16BE, 8, readBMEReg(ac5, NumberFormat.UInt16BE))
-  regPBuf.setNumber(NumberFormat.UInt16BE, 10, readBMEReg(ac6, NumberFormat.UInt16BE))
-  regPBuf.setNumber(NumberFormat.Int16BE, 12, readBMEReg(b1, NumberFormat.Int16BE))
-  regPBuf.setNumber(NumberFormat.Int16BE, 14, readBMEReg(b2, NumberFormat.Int16BE))
-  regPBuf.setNumber(NumberFormat.Int16BE, 16, readBMEReg(mb, NumberFormat.Int16BE))
-  regPBuf.setNumber(NumberFormat.Int16BE, 18, readBMEReg(mc, NumberFormat.Int16BE))
-  regPBuf.setNumber(NumberFormat.Int16BE, 20, readBMEReg(md, NumberFormat.Int16BE))
-  regPBuf.setNumber(NumberFormat.Int16BE, 22, bmpMode)  
- 
-  //Datasheet Value
-  /*
-  ac1Val = 408
-  ac2Val = -72
-  ac3Val = -14383
-  ac4Val = 32741
-  ac5Val = 32757
-  ac6Val = 23153
-  b1Val = 6190
-  b2Val = 4
-  mbVal = -32768
-  mcVal = -8711
-  mdVal = 2868
+  regPBuf.setNumber(NumberFormat.Int16LE, 0, readBMEReg(ac1, NumberFormat.Int16BE))
+  regPBuf.setNumber(NumberFormat.Int16LE, 2, readBMEReg(ac2, NumberFormat.Int16BE))
+  regPBuf.setNumber(NumberFormat.Int16LE, 4, readBMEReg(ac3, NumberFormat.Int16BE))
+  regPBuf.setNumber(NumberFormat.UInt16LE, 6, readBMEReg(ac4, NumberFormat.UInt16BE))
+  regPBuf.setNumber(NumberFormat.UInt16LE, 8, readBMEReg(ac5, NumberFormat.UInt16BE))
+  regPBuf.setNumber(NumberFormat.UInt16LE, 10, readBMEReg(ac6, NumberFormat.UInt16BE))
+  regPBuf.setNumber(NumberFormat.Int16LE, 12, readBMEReg(b1, NumberFormat.Int16BE))
+  regPBuf.setNumber(NumberFormat.Int16LE, 14, readBMEReg(b2, NumberFormat.Int16BE))
+  regPBuf.setNumber(NumberFormat.Int16LE, 16, readBMEReg(mb, NumberFormat.Int16BE))
+  regPBuf.setNumber(NumberFormat.Int16LE, 18, readBMEReg(mc, NumberFormat.Int16BE))
+  regPBuf.setNumber(NumberFormat.Int16LE, 20, readBMEReg(md, NumberFormat.Int16BE))
+  regPBuf.setNumber(NumberFormat.Int16LE, 22, bmpMode)  
+
+/*
+      ////Variable Debug datasheet value
+      ac1Val = 408
+      ac2Val = -72
+      ac3Val = -14383
+      ac4Val = 32741
+      ac5Val = 32757
+      ac6Val = 23153
+      b1Val = 6190
+      b2Val = 4
+      mbVal = -32768
+      mcVal = -8711
+      mdVal = 2868
+  
+      regPBuf.setNumber(NumberFormat.Int16LE, 0, ac1Val)
+      regPBuf.setNumber(NumberFormat.Int16LE, 2, ac2Val)
+      regPBuf.setNumber(NumberFormat.Int16LE, 4, ac3Val)
+      regPBuf.setNumber(NumberFormat.UInt16LE, 6, ac4Val)
+      regPBuf.setNumber(NumberFormat.UInt16LE, 8, ac5Val)
+      regPBuf.setNumber(NumberFormat.UInt16LE, 10,ac6Val)
+      regPBuf.setNumber(NumberFormat.Int16LE, 12, b1Val)
+      regPBuf.setNumber(NumberFormat.Int16LE, 14, b2Val) 
+      regPBuf.setNumber(NumberFormat.Int16LE, 16, mbVal) 
+      regPBuf.setNumber(NumberFormat.Int16LE, 18, mcVal) 
+      regPBuf.setNumber(NumberFormat.Int16LE, 20, mdVal) 
+      regPBuf.setNumber(NumberFormat.Int16LE, 22, bmpMode)  
 */
   let X1 = (UT - ac6Val) * (ac5Val) >> 15;
   let X2 = (mcVal << 11) / (X1 + mdVal);
@@ -211,7 +236,7 @@ function computeB5(UT: number) {
  * Function used for simulator, actual implementation is in bmp085.cpp
 */
 //% shim=bmp085::compensatePressure
-function compensatePressure(b5: number, up: number, regPBuf: Buffer) {
+function compensatePressure(b5: number, up: number, compensation: Buffer) {
     // Fake function for simulator
     return 0
 }
@@ -238,8 +263,13 @@ export function Altitude(): number {
     let b5 = 0
     let p = 0
 
+    WriteBMEReg(ctrl, readTempCMD)
+    basic.pause(5)
+    // Read the temperature registers
+    UT = readBMEReg(tempData, NumberFormat.Int16BE)
+
     /* Get the raw pressure and temperature values */
-    UT = readBMEReg(tempData, NumberFormat.UInt16BE)
+    //UT = readBMEReg(tempData, NumberFormat.Int16BE)
 
     /* Temperature compensation */
     b5 = computeB5(UT)
