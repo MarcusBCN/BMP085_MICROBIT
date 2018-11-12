@@ -10,6 +10,7 @@ The package adds support for the **BMP180:bit** add-on board.
 
 * Atmospheric Monitoring with the onboard [BME180](https://www.sparkfun.com/datasheets/Components/General/BST-BMP085-DS000-05.pdf) sensor (I2C)
 	* Pressure
+	* Temperature
 	* Altitude	
 
 ### Micro:bit Pins Used 
@@ -31,5 +32,4 @@ MIT
 ## Supported targets
 
 * for PXT/microbit
-(The metadata above is needed for package search.)
 
