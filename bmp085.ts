@@ -2,7 +2,7 @@
 * Andrés Sabas @ The Inventor's House
 * https://github.com/sabas1080
 * January 12, 2018
-* https://github.com/
+* https://github.com/sabas1080/uBit_BMP085
 * Development environment specifics:
 * Written in Microsoft PXT
 * Tested with a BMP085 for micro:bit
