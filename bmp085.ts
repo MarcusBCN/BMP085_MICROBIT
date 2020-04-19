@@ -21,6 +21,8 @@ namespace bmp085{
   const readTempCMD = 0x2E
   const readPressCMD = 0x34
   const chipID = 0X0D
+  const sealevelPressure = 101325
+  
 
   // BMP Compensation Parameter Addresses
   const ac1 = 0xAA
@@ -228,7 +230,7 @@ function computeB5(UT: number) {
 export function Altitude(): number {    
     let p = pressure()
   
-    return 44330*(1-Math.pow(((p/25600)/1013.25), 0.1903));
+    return 44330*(1-Math.pow(p/sealevelPressure, 0.1903));
 }
 
 }
