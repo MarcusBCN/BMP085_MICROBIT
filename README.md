@@ -1,4 +1,3 @@
-[![Build Status](https://travis-ci.org/sabas1080/uBit_BMP085.svg?branch=master)](https://travis-ci.org/sabas1080/uBit_BMP085) 
 
 # uBit_BMP085
 
