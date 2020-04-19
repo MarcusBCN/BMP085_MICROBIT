@@ -12,6 +12,14 @@
 * or concerns with licensing, please contact s@theinventorhouse.org.
 * Distributed as-is; no warranty is given.
 */
+enum bmp_bmpmode{
+  ULTRALOWPOWER = 0,
+  STANDARD = 1,
+  HIGHRES = 2,
+  ULTRAHIGHRES = 3
+}
+  
+  
 namespace bmp085{
   // BMP085 Addresses
   const bmpAddr = 0x77
@@ -94,7 +102,7 @@ namespace bmp085{
    * SelectModeBmp (0,1,2,3), default: 0
    */
   //% weight=45 blockGap=8 blockId="SelecBMPMode" block="SelectBMPMode %value"
-export function selectBmpMode(value: number): void {
+export function selectBmpMode(value: bmp_bmpmode): void {
     bmpMode = value
 }
 
