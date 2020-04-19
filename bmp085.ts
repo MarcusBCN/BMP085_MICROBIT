@@ -15,17 +15,15 @@
 * Distributed as-is; no warranty is given.
 */
 
-  
-  
-namespace bmp085{
-
   enum bmp_bmpmode{
   ULTRALOWPOWER = 0,
   STANDARD = 1,
   HIGHRES = 2,
   ULTRAHIGHRES = 3
-}
-  
+  }
+
+namespace bmp085{
+
   // BMP085 Addresses
   const bmpAddr = 0x77
   const ctrl = 0xF4
