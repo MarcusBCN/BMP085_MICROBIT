@@ -1,4 +1,6 @@
 /**
+* Marc Felip
+* May, 19 2020
 * Andrés Sabas @ The Inventor's House
 * https://github.com/sabas1080
 * January 12, 2018
@@ -58,7 +60,8 @@ namespace bmp085{
    let mcVal = 0
    let mdVal = 0
 
-   let bmpMode = 0
+   let oversampling = 0
+  
 
    // Buffer to hold pressure compensation values to pass to the C++ compensation function
    let regPBuf: Buffer
@@ -103,7 +106,7 @@ namespace bmp085{
    */
   //% weight=45 blockGap=8 blockId="SelecBMPMode" block="SelectBMPMode %value"
 export function selectBmpMode(value: bmp_bmpmode): void {
-    bmpMode = value
+    oversampling = value
 }
 
   /**
@@ -126,58 +129,57 @@ export function selectBmpMode(value: bmp_bmpmode): void {
     let x3 = 0
     let p = 0
     let compp = 0
-
     
-    WriteBMEReg(ctrl, readTempCMD)
-    basic.pause(5)
+    WriteBMEReg(ctrl, readPressCMD + (oversampling << 6))
+    if (oversampling = ULTRALOWPOWER)
+      basic.pause(5)
+    else if (oversampling = STANDARD)
+      basic.pause(8)
+    else if (oversampling = HIGHRES)
+      basic.pause(14)
+    else 
+      basic.pause(8)
     
-    // Read the temperature registers
-    UT = readBMEReg(tempData, NumberFormat.Int16BE)
-    
-    //Variable Debug datasheet value
-    //UT = 27898
-
-    WriteBMEReg(ctrl, readPressCMD + (bmpMode << 6))
-    basic.pause(5)
     p16 = readBMEReg(pressData, NumberFormat.UInt16BE)
     up = p16 << 8
-    p8 = readBMEReg(pressData, NumberFormat.UInt8LE)
+    p8 = readBMEReg(pressData+2, NumberFormat.UInt8LE)
     up += p8
-    up >>= (8 - bmpMode)
+    up >>= (8 - oversampling)
     
     //Variable Debug datasheet value
     //up = 23843
 
-      /* Temperature compensation */
-    b5 = computeB5(UT)
+      /* presure compensation */
+    b5 = computeB5(up)
     
     b6 = b5 - 4000;
     x1 = (b2Val * ((b6 * b6) >> 12)) >> 11;
     x2 = (ac2Val * b6) >> 11;
     x3 = x1 + x2;
-    b3 = ((((ac1Val) * 4 + x3) << bmpMode) + 2) /4;
+    b3 = ((((ac1Val) * 4 + x3) << oversampling) + 2) /4;
+    
     x1 = (ac3Val * b6) >> 13;
     x2 = (b1Val * ((b6 * b6) >> 12)) >> 16;
     x3 = ((x1 + x2) + 2) >> 2;
     b4 = (ac4Val * (x3 + 32768)) >> 15;
-    b7 = ((up - b3) * (50000 >> bmpMode));
+    b7 = ((up - b3) * (50000 >> oversampling));
   
     if (b7 < 0x80000000)
     {
-      p = (b7 << 1) / b4;
+      p = (b7 * 2) / b4;
     }
     else
     {
-      p = (b7 / b4) << 1;
+      p = (b7 / b4) * 2 ;
     }
 
     x1 = (p >> 8) * (p >> 8)
     x1 = (x1 * 3038) >> 16
     x2 = (-7357 * p) >> 16
-    compp = p + ((x1 + x2 + 3791) >> 4)
+    p = p + ((x1 + x2 + 3791) >> 4)
 
     /* Assign compensated pressure value */
-    return compp
+    return p
   }
 
   /**
