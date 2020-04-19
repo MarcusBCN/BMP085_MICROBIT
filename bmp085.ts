@@ -20,6 +20,7 @@ namespace bmp085{
   const tempData = 0xF6
   const readTempCMD = 0x2E
   const readPressCMD = 0x34
+  const chipID = 0X0D
 
   // BMP Compensation Parameter Addresses
   const ac1 = 0xAA
@@ -144,7 +145,7 @@ export function selectBmpMode(value: number): void {
     x1 = (b2Val * ((b6 * b6) >> 12)) >> 11;
     x2 = (ac2Val * b6) >> 11;
     x3 = x1 + x2;
-    b3 = ((((ac1Val) * 4 + x3) << bmpMode) + 2) >> 2;
+    b3 = ((((ac1Val) * 4 + x3) << bmpMode) + 2) /4;
     x1 = (ac3Val * b6) >> 13;
     x2 = (b1Val * ((b6 * b6) >> 12)) >> 16;
     x3 = ((x1 + x2) + 2) >> 2;
