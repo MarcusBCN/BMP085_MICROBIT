@@ -134,11 +134,11 @@ export function selectBmpMode(value: bmp_bmpmode): void {
     let compp = 0
     
     WriteBMEReg(ctrl, readPressCMD + (oversampling << 6))
-    if (oversampling = ULTRALOWPOWER)
+    if (oversampling = 0)
       basic.pause(5)
-    else if (oversampling = STANDARD)
+    else if (oversampling = 1)
       basic.pause(8)
-    else if (oversampling = HIGHRES)
+    else if (oversampling = 2)
       basic.pause(14)
     else 
       basic.pause(8)
