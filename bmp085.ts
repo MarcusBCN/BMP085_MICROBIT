@@ -28,7 +28,7 @@ namespace bmp085{
   const bmpAddr = 0x77
   const ctrl = 0xF4
   const version = 0xD1
-  const chip_id = =0xD0
+  const chip_id = 0xD0
   const pressData = 0xF6
   const tempData = 0xF6
   const readTempCMD = 0x2E
