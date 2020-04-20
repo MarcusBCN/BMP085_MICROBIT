@@ -113,7 +113,8 @@ export function selectBmpMode(value: bmp_bmpmode): void {
 }
  
 export function getVersion (): number {
-  p= readBMEReg(version, NumberFormat.UInt16BE)
+  let p = 0
+  p = readBMEReg(version, NumberFormat.UInt16BE)
   return p
 }
 
