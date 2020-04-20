@@ -241,7 +241,12 @@ function computeB5(UT: number) {
 export function Altitude(): number {    
     let p = pressure()
   
-    return 44330*(1-Math.pow(p/sealevelPressure, 0.1903));
+    return 44330*(1-Math.pow(p/sealevelPressure, 0.1902949));
+}
+ 
+export function getSeaLevel (pressure:number, altitude:number)
+{
+  return pressure / Math.pow(1 - (altitude / 44330 ), 5.255);
 }
 
 }
