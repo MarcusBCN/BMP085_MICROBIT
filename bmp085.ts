@@ -27,6 +27,8 @@ namespace bmp085{
   // BMP085 Addresses
   const bmpAddr = 0x77
   const ctrl = 0xF4
+  const version = 0xD1
+  const chip_id = =0xD0
   const pressData = 0xF6
   const tempData = 0xF6
   const readTempCMD = 0x2E
@@ -108,6 +110,11 @@ namespace bmp085{
   //% weight=45 blockGap=8 blockId="SelecBMPMode" block="SelectBMPMode %value"
 export function selectBmpMode(value: bmp_bmpmode): void {
     oversampling = value
+}
+ 
+export function getVersion (): number {
+  p= readBMEReg(version, NumberFormat.UInt16BE)
+  return p
 }
 
   /**
@@ -244,7 +251,7 @@ export function Altitude(): number {
     return 44330*(1-Math.pow(p/sealevelPressure, 0.1902949));
 }
  
-export function getSeaLevel (pressure:number, altitude:number)
+export function getSeaLevel (pressure:number, altitude:number):number
 {
   return pressure / Math.pow(1 - (altitude / 44330 ), 5.255);
 }
