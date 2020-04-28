@@ -1,12 +1,10 @@
 
 /**
 * Marc Felip
-* May, 21 2020
+* May, 28 2020
 *from Adafruit original Lib included in Arduino Lib
 tested in BMP085 and micro:bit during 3 days
 **********************************************************
-
-
 * Andrés Sabas @ The Inventor's House
 * https://github.com/sabas1080
 * January 12, 2018
@@ -33,7 +31,7 @@ enum true_table {
     Off = 0
 }
 
-//% color=#27b0ba weight=100 icon="\uf27c" advanced=true
+//% color=#27b0ba weight=100 icon="\uf043" advanced=true
 namespace bmp085 {
 
     let BMP085_DEBUG = false
@@ -139,7 +137,8 @@ namespace bmp085 {
         return X1 + X2;
     }
 
-    //% weight=45 blockGap=8 blockId="readRawTemperature" block="raw temperature"
+    //% subcategory=Maintenance
+	//% weight=45 blockGap=8 blockId="readRawTemperature" block="raw temperature"
     export function readRawTemperature(): number {
         write8(BMP085_CONTROL, BMP085_READTEMPCMD)
         basic.pause(5)
@@ -274,7 +273,8 @@ namespace bmp085 {
         pins.i2cWriteNumber(BMP085_I2CADDR, addr << 8 | data, NumberFormat.Int16BE)
     }
 
-    //% weight=45 blockGap=8 blockId="debug" block="debug serial %value"
+    //% subcategory=Maintenance
+	//% weight=45 blockGap=8 blockId="debug" block="debug serial %value"
     export function debug(data: true_table): void {
         if (data == 1) {
 
@@ -294,7 +294,8 @@ namespace bmp085 {
      * Reads the temp from the BMP sensor and uses compensation for calculator temperature.
      * Returns 4 digit number. Value should be devided by 100 to get DegC
      */
-    //% weight=45 blockGap=8 blockId="viewVersion" block="version"
+    //% subcategory=Maintenance
+	//% weight=45 blockGap=8 blockId="viewVersion" block="version"
     export function getVersion(): number {
         p = read8(version, NumberFormat.UInt16BE)
         return p
