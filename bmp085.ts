@@ -275,7 +275,7 @@ namespace bmp085 {
 
     //% subcategory=Maintenance
 	//% weight=45 blockGap=8 blockId="debug" block="debug serial %value"
-    export function debug(data: true_table): void {
+    export function debug(data: boolean): void {
         if (data == 1) {
 
             BMP085_DEBUG = true
